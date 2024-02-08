@@ -20,23 +20,22 @@
                 </thead>
                 <tbody>
                     @foreach ($guards as $guard)
-                        <tr>
-                            <td>{{ $guard->securityId }}</td>
-                            <td>{{ $guard->securityName }}</td>
-                            <td>{{ $guard->guard_username }}</td>
-                            <td>{{ \Carbon\Carbon::parse($guard->created_at)->format('d-m-y') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($guard->updated_at)->format('d-m-y') }}</td>
-                            <td><button class="btn btn-primary btn-sm"
-                                onclick="">Edit</button>
-                           
-                            <button class="btn btn-error btn-sm"
-                                onclick="">Delete</button></td>
-                        </tr>
+                    <tr>
+                        <td>{{ $guard->securityId }}</td>
+                        <td>{{ $guard->securityName }}</td>
+                        <td>{{ $guard->guard_username }}</td>
+                        <td>{{ \Carbon\Carbon::parse($guard->created_at)->format('d-m-y') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($guard->updated_at)->format('d-m-y') }}</td>
+                        <td><button class="btn btn-primary btn-sm" onclick="">Edit</button>
+
+                            <button class="btn btn-error btn-sm" onclick="">Delete</button>
+                        </td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        <button class="my-4 btn btn-success" onclick="window.location.href='{{ route('admin.add_student') }}'">Add
+        <button class="my-4 btn btn-success" onclick="window.location.href='/admin/createGuard'">Add
             Guard</button>
     </x-slot>
 </x-app-layout>

@@ -19,28 +19,24 @@
                 </thead>
                 <tbody>
                     @foreach ($students as $student)
-                        <tr>
-                            <td>{{ $student->matricNumber }}</td>
-                            <td>{{ $student->name }}</td>
-                            <td>{{ $student->icNumber }}</td>
-                            <td>{{ $student->plateNumber }}</td>
-                            <td>
-                                <button class="btn btn-primary btn-sm"
-                                    onclick="window.location.href='{{ route('admin.edit_student', $student->matricNumber) }}'">Edit</button>
-                                <button class="btn  btn-sm mx-2"
-                                    onclick="showQR('{{ $student->QRCodeId }}', '{{ $student->matricNumber }}')">Show
-                                    QR</button>
-                                <button class="btn btn-error btn-sm"
-                                    onclick="confirmDelete('{{ route('admin.delete_student', $student->matricNumber) }}')">Delete</button>
+                    <tr>
+                        <td>{{ $student->matricNumber }}</td>
+                        <td>{{ $student->name }}</td>
+                        <td>{{ $student->icNumber }}</td>
+                        <td>{{ $student->plateNumber }}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="window.location.href='{{ route('admin.edit_student', $student->matricNumber) }}'">Edit</button>
+                            <button class="btn  btn-sm mx-2" onclick="showQR('{{ $student->QRCodeId }}', '{{ $student->matricNumber }}')">Show
+                                Sticker</button>
+                            <button class="btn btn-error btn-sm" onclick="confirmDelete('{{ route('admin.delete_student', $student->matricNumber) }}')">Delete</button>
 
-                            </td>
-                        </tr>
+                        </td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        <button class="my-4 btn btn-success" onclick="window.location.href='{{ route('admin.add_student') }}'">Add
-            Student</button>
+
     </x-slot>
 </x-app-layout>
 
@@ -52,10 +48,8 @@
             <form method="dialog">
                 <!-- if there is a button in form, it will close the modal -->
                 <button class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Close</button>
-                <button class="btn bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                    onclick="downloadQR()">Save QR Code</button>
-                <button class="btn bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
-                    onclick="printQR()">Print QR Code</button>
+                <button class="btn bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="downloadQR()">Save QR Code</button>
+                <button class="btn bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" onclick="printQR()">Print QR Code</button>
             </form>
         </div>
     </div>
@@ -71,7 +65,7 @@
     function confirmDelete(url) {
         Swal.fire({
             title: '<h1 style="color:white">Are you sure?</h1>',
- 
+
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',

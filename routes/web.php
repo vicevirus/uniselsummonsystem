@@ -7,7 +7,10 @@ use App\Models\SecurityGuard;
 use App\Models\IssueSummon;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\AdminController;
+use App\Http\Controllers\SummonController;
+use Intervention\Image\ImageManager;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,23 +34,12 @@ Route::get('/teest', function () {
     SecurityGuard::create([
         'securityName' => 'Firdaus',
         'guard_username' => 'vicevirus',
-        'guard_password' => Hash::make('#B1sm1llah#'),
+        'guard_password' => Hash::make('sensonic'),
 
     ]);
 });
 
-Route::get('/testCreateSummon', function () {
-    IssueSummon::create([
-        'violation' => 'Example Violation',
-        'fineAmount' => 100.00, // Example fine amount
-        'dueDate' => now()->addDays(30), // Example due date 30 days from now
-        'issuedBy' => 'Example Issuer',
-        'QRCodeId' => '2290862e-def8-47ca-8420-7243a68e445a', // Example QR code ID, should exist in your students table
-        'securityId' => 1, // Example security ID, should exist in your security_guards table
-    ]);
 
-    return 'Summon created successfully!';
-});
 
 
 
@@ -55,16 +47,54 @@ Route::post('admin/approve/{matricNumber}', [AdminController::class, 'approveStu
 
 
 Route::get('/dashboard', function () {
-    
-    $summonsRecords = IssueSummon::with('student')->whereHas('student', fn($query) => $query->where('matricNumber', Auth::id()))->get();
 
-    
+    $summonsRecords = IssueSummon::with('student')
+        ->whereHas('student', function ($query) {
+            $query->where('matricNumber', Auth::id());
+        })
+        ->where('status', '!=', 'paid')
+        ->get();
+
+
+
     return view('user.userDashboard', ['summonsRecords' => $summonsRecords]);
 })->middleware(['auth'])->name('dashboard');
 
+Route::get('/paySummon', function (Request $request) {
+
+    $summonId = $request->input('summonId');
+
+    $summon = IssueSummon::find($summonId);
+
+    return view('user.userPaySummon', ['summon' => $summon]);
+})->middleware(['auth'])->name('paySummon');
+
+Route::post('/paidSummon', [SummonController::class, 'paySummon'])->name('paidSummon');
+
 Route::get('/generate_qr/{qrCodeId}', function ($qrCodeId) {
-    return QrCode::format('png')->size(500)->generate($qrCodeId);
+    // Assuming QrCode::generate() can save to a file directly
+    $qrFilePath = tempnam(sys_get_temp_dir(), 'qr') . '.png'; // Temporary file
+    QrCode::format('png')->size(290)->generate($qrCodeId, $qrFilePath);
+
+    $image = imagecreatefromjpeg(public_path('template.jpeg'));
+    $qrCode = imagecreatefrompng($qrFilePath);
+
+
+
+    $x = imagesx($image) - 990; // Adjust the position
+    $y = 90;
+
+    imagecopy($image, $qrCode, $x, $y, 0, 0, 290, 290);
+
+    header('Content-Type: image/jpeg');
+    imagejpeg($image);
+    imagedestroy($image);
+    imagedestroy($qrCode);
+    unlink($qrFilePath); // Remove the temporary file
 });
+
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

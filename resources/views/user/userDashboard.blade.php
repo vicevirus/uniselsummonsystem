@@ -10,24 +10,24 @@
             <table id="summonsTable" class="table">
                 <thead>
                     <tr>
-                        <th>Summon ID</th>
                         <th>Violation</th>
                         <th>Fine Amount</th>
                         <th>Due Date</th>
                         <th>Issued By</th>
+                        <th>Action</th>
                         <!-- Add more column headers as needed -->
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($summonsRecords as $record)
-                        <tr>
-                            <td>{{ $record->summonId }}</td>
-                            <td>{{ $record->violation }}</td>
-                            <td>{{ $record->fineAmount }}</td>
-                            <td>{{ $record->dueDate->format('Y-m-d') }}</td>
-                            <td>{{ $record->issuedBy }}</td>
-                            <!-- Add more columns as needed -->
-                        </tr>
+                    <tr>
+                        <td>{{ $record->violation }}</td>
+                        <td>{{ $record->fineAmount }}</td>
+                        <td>{{ $record->dueDate->format('Y-m-d') }}</td>
+                        <td>{{ $record->issuedBy }}</td>
+                        <td><a href="{{ route('paySummon', ['summonId' => $record->summonId]) }}" class="btn btn-primary">Pay Summon</a></td>
+
+                    </tr>
                     @endforeach
                 </tbody>
             </table>

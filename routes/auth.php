@@ -71,12 +71,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/edit_student/{matricNumber}', [AdminController::class, 'editStudent'])->name('edit_student');
         Route::get('/delete_student/{matricNumber}', [AdminController::class, 'deleteStudent'])->name('delete_student');
 
+
+        //Edit student
+        Route::put('/student/{matricNumber}/update', [AdminController::class, 'updateStudent'])->name('updateStudent');
+
         // Manage Summons
         Route::get('/manage_summons', [AdminController::class, 'manageSummons'])->name('manage_summons');
 
         // Register security guards account
         Route::get('/manage_guards', [AdminController::class, 'manageGuards'])->name('manage_guards');
-
+        Route::get('/createGuard', [SecurityGuardController::class, 'createGuardForm']);
+        Route::post('/storeGuard', [SecurityGuardController::class, 'storeGuard']);
     });
 });
 

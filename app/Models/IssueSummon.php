@@ -19,15 +19,16 @@ class IssueSummon extends Model
         'dueDate',
         'issuedBy',
         'QRCodeId',
+        'status',
         'securityId',
     ];
 
     protected $casts = [
-        'dueDate' => 'date', 
+        'dueDate' => 'date',
     ];
-    
 
-   
+
+
     public function student()
     {
         return $this->belongsTo(Student::class, 'QRCodeId', 'QRCodeId');

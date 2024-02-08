@@ -25,6 +25,13 @@
 
         <!-- Plate Number -->
         <div class="mt-4">
+            <x-input-label for="phoneNumber" :value="__('Phone Number')" />
+            <x-text-input id="phoneNumber" class="block mt-1 w-full" type="text" name="phoneNumber" :value="old('phoneNumber')" autocomplete="phoneNumber" />
+            <x-input-error :messages="$errors->get('phoneNumber')" class="mt-2" />
+        </div>
+
+        <!-- Plate Number -->
+        <div class="mt-4">
             <x-input-label for="plateNumber" :value="__('Plate Number')" />
             <x-text-input id="plateNumber" class="block mt-1 w-full" type="text" name="plateNumber" :value="old('plateNumber')" autocomplete="plateNumber" />
             <x-input-error :messages="$errors->get('plateNumber')" class="mt-2" />
@@ -49,7 +56,7 @@
                 {{ __('Already registered?') }}
             </a>
 
-            
+
             <x-primary-button class="ms-4">
                 {{ __('Register') }}
             </x-primary-button>

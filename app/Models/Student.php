@@ -22,6 +22,7 @@ class Student extends Authenticatable
         'icNumber',
         'name',
         'plateNumber',
+        'phoneNumber',
         'address',
         'carType',
         'password',
@@ -34,7 +35,7 @@ class Student extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password', 
+        'password',
     ];
 
     /**

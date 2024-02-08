@@ -10,12 +10,10 @@ class SecurityGuard extends Authenticatable
     use Notifiable;
 
     protected $primaryKey = 'securityId';
-    protected $fillable = ['securityName', 'guard_username', 'guard_password'];
+    protected $fillable = ['securityName', 'guard_username', 'guard_password', 'api_token'];
 
     public function getAuthPassword()
     {
-        return $this->guard_password; 
+        return $this->guard_password;
     }
-
-  
 }
