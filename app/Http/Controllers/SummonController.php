@@ -38,7 +38,7 @@ class SummonController extends Controller
         $validator = Validator::make($request->all(), [
             'QRCodeId' => 'required|exists:students,QRCodeId',
             'fineAmount' => 'required|numeric',
-            'dueDate' => 'required|date_format:d/m/Y',
+            'dueDate' => 'required',
             'securityId' => 'required|exists:security_guards,securityId',
         ]);
 

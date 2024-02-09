@@ -52,12 +52,18 @@ Route::get('/dashboard', function () {
         ->whereHas('student', function ($query) {
             $query->where('matricNumber', Auth::id());
         })
-        ->where('status', '!=', 'paid')
         ->get();
 
+    $filteredRecords = $summonsRecords->where('status', '!=', 'paid');
 
 
-    return view('user.userDashboard', ['summonsRecords' => $summonsRecords]);
+
+
+
+
+
+
+    return view('user.userDashboard', ['summonsRecords' => $filteredRecords]);
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/paySummon', function (Request $request) {

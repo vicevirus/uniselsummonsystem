@@ -91,7 +91,7 @@ class _QRViewExampleState extends State<QRViewExample> {
       final prefs = await SharedPreferences.getInstance();
       final securityName = prefs.getString('securityName') ?? '';
       final securityId = prefs.getInt('securityId') ?? '';
-
+      print(dueDate);
       final response = await http.post(
         Uri.parse(
             'http://10.0.2.2:8000/api/guard/createSummon'), // Replace with your API endpoint
@@ -105,6 +105,7 @@ class _QRViewExampleState extends State<QRViewExample> {
         },
       );
 
+      print(response.body);
       if (response.statusCode == 200) {
         Fluttertoast.showToast(
           msg: 'Summon created successfully',
@@ -141,6 +142,8 @@ class _QRViewExampleState extends State<QRViewExample> {
     controller?.resumeCamera();
   }
 
+  String _dueDateErrorMessage = '';
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -150,10 +153,26 @@ class _QRViewExampleState extends State<QRViewExample> {
     );
 
     if (pickedDate != null) {
-      setState(() {
-        dueDate = '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
-      });
+      final formattedDate =
+          '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
+      if (_validateDueDateFormat(formattedDate)) {
+        setState(() {
+          dueDate = formattedDate;
+          _dueDateErrorMessage = ''; // Clear any previous error message
+        });
+      } else {
+        setState(() {
+          _dueDateErrorMessage =
+              'The due date field must match the format d/m/Y.';
+        });
+      }
     }
+  }
+
+  bool _validateDueDateFormat(String date) {
+    // Regular expression to match the format "d/m/Y"
+    final RegExp regex = RegExp(r'^\d{1,2}/\d{1,2}/\d{4}$');
+    return regex.hasMatch(date);
   }
 
   @override
