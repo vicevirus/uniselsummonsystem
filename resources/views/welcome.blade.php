@@ -65,18 +65,20 @@
     <div class="hero min-h-screen" style="background-image: url('uniselsummon.webp');">
         <div class="hero-overlay bg-opacity-60"></div>
         <div class="hero-content text-center text-neutral-content">
-            <div class="max-w-md">
-                <h1 class="mb-5 text-5xl font-bold text-white dark:text-gray-300">Welcome to Unisel Summon System</h1>
-                <p class="mb-5 text-gray-200 dark:text-gray-400 font-bold">Effortlessly check, issue, and manage student summons with our intuitive platform. Streamlining processes for universities and students alike.</p>
-                @guest
-                <a href="{{ route('login') }}" class="btn btn-primary">Log in</a>
-                @if (Route::has('register'))
-                <a href="{{ route('register') }}" class="btn btn-secondary">Register</a>
-                @endif
-                @endguest
+            <div class="flex flex-col items-center justify-center">
+                <div class="max-w-md">
+                    <h1 class="mb-5 text-5xl font-bold text-white dark:text-gray-300">Welcome to Unisel Summon System</h1>
+                </div>
+                <div class="card w-96 bg-neutral text-primary-content">
+                    <div class="card-body">
+                        <p class="text-gray-200 dark:text-gray-400 font-semibold">Effortlessly check, issue, and manage student summons with our intuitive platform. Streamlining processes for universities and students alike.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+
 
     <script>
         const btn = document.querySelector("button.mobile-menu-button");

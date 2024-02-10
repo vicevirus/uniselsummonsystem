@@ -29,7 +29,7 @@ class AdminController extends Controller
 
         if (Auth::guard('admin')->attempt(['admin_username' => $request->admin_username, 'password' => $request->admin_password])) {
 
-            return redirect()->intended(route('admin.dashboard'));
+            return redirect()->route('admin.dashboard');
         }
 
         return redirect()->back()->withInput($request->only('admin_username', 'remember'));
