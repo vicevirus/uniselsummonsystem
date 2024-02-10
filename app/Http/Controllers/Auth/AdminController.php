@@ -124,7 +124,7 @@ class AdminController extends Controller
 
         // Send SMS notification about the approval
         $response = Http::post('https://terminal.adasms.com/api/v1/send', [
-            '_token' => 'ORwTbXzwx0WM1UBLglmt4sFxvyeMrZRO',
+            '_token' => env('ADA_SMS_API_KEY'),
             'phone' => $student->phoneNumber,
             'message' => "UNISEL: Your sticker and account has been approved for the UNISEL Summon System!",
         ]);
