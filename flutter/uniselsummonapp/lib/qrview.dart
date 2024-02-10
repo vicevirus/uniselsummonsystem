@@ -20,56 +20,93 @@ class _QRViewExampleState extends State<QRViewExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              (result != null)
-                  ? Text('QR Code Data: ${result!.code}')
-                  : Text('Scan a code'),
-              TextField(
-                controller: violationController,
-                decoration: InputDecoration(labelText: 'Violation'),
-              ),
-              TextField(
-                controller: fineAmountController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Fine Amount'),
-              ),
-              InkWell(
-                onTap: () {
-                  _selectDate(context);
-                },
+      appBar: AppBar(
+        title: Text('QR Code Summon Scanner'),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
                 child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(color: Colors.blueAccent),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Text(
-                    dueDate.isNotEmpty ? dueDate : 'Select Due Date',
-                    style: TextStyle(fontSize: 16),
+                  child: QRView(
+                    key: qrKey,
+                    onQRViewCreated: _onQRViewCreated,
                   ),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  await createSummon();
-                },
-                child: Text('Create Summon'),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    result != null
+                        ? 'QR Code Data: ${result!.code}'
+                        : 'Scan a code',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: violationController,
+                    decoration: InputDecoration(
+                      labelText: 'Violation',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: fineAmountController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Fine Amount',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  InkWell(
+                    onTap: () {
+                      _selectDate(context);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        dueDate.isNotEmpty ? dueDate : 'Select Due Date',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await createSummon();
+                    },
+                    child: Text('Create Summon',
+                        style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blueAccent,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                      textStyle: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -81,7 +118,6 @@ class _QRViewExampleState extends State<QRViewExample> {
         result = scanData;
       });
 
-      // Pause camera after detecting a result
       controller.pauseCamera();
     });
   }

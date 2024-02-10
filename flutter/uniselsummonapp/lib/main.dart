@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'qrview.dart'; // Replace 'qr_view_example.dart' with the correct file name
+import 'qrview.dart'; // Ensure this is correctly imported with the correct file name
 
 void main() {
   runApp(MyApp());
@@ -23,11 +23,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String _loginFeedback = '';
 
   Future<void> _login() async {
+    if (!_formKey.currentState!.validate()) {
+      // If the form is not valid, return to prevent the login attempt
+      return;
+    }
+
     try {
       var response = await http.post(
         Uri.parse('http://10.0.2.2:8000/api/guard/login'),
@@ -39,8 +45,6 @@ class _LoginPageState extends State<LoginPage> {
           'password': _passwordController.text,
         }),
       );
-
-      print(1);
 
       if (response.statusCode == 200) {
         var token = jsonDecode(response.body)['token'];
@@ -56,7 +60,9 @@ class _LoginPageState extends State<LoginPage> {
         });
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => QRViewExample()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  QRViewExample()), // Ensure this navigates correctly
         );
       } else {
         setState(() {
@@ -73,30 +79,78 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(labelText: 'Username'),
+      appBar: AppBar(
+        title: Text('Login'), // Changed to just 'Login'
+        backgroundColor: Colors.blue, // Customize with Unisel's color
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'UNISEL Summon System',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue, // Customize with Unisel's color
+                  ),
+                ),
+                SizedBox(height: 20), // Space after the text logo
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    labelText: 'Username',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.person),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your username';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.lock),
+                  ),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 32),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blue, // Customize with Unisel's color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                    textStyle: TextStyle(fontSize: 18),
+                  ),
+                  onPressed: _login,
+                  child: Text(
+                    'Login',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text(_loginFeedback),
+              ],
             ),
-            SizedBox(height: 8),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _login,
-              child: Text('Login'),
-            ),
-            SizedBox(height: 20),
-            Text(_loginFeedback),
-          ],
+          ),
         ),
       ),
     );
