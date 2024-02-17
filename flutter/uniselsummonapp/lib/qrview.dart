@@ -130,7 +130,7 @@ class _QRViewExampleState extends State<QRViewExample> {
       print(dueDate);
       final response = await http.post(
         Uri.parse(
-            'http://10.0.2.2:8000/api/guard/createSummon'), // Replace with your API endpoint
+            'https://uniselsummon.duckdns.org/api/guard/createSummon'), // Replace with your API endpoint
         body: {
           'QRCodeId': result!.code,
           'violation': violationController.text,

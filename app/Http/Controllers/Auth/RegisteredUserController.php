@@ -32,7 +32,7 @@ class RegisteredUserController extends Controller
         ];
 
         $request->validate([
-            'phoneNumber' => ['required', 'string', 'regex:/^60\d{9}$/'], // Ensure phone number starts with 60
+            'phoneNumber' => ['required', 'string', 'regex:/^60.*$/i'], // Ensure phone number starts with 60
         ], $messages);
 
 

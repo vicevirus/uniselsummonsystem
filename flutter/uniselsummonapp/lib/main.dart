@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       var response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/guard/login'),
+        Uri.parse('https://uniselsummon.duckdns.org/api/guard/login'),
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
