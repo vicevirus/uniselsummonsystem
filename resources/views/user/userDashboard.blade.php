@@ -25,7 +25,14 @@
                         <td>{{ $record->fineAmount }}</td>
                         <td>{{ $record->dueDate->format('Y-m-d') }}</td>
                         <td>{{ $record->issuedBy }}</td>
-                        <td><a href="{{ route('paySummon', ['summonId' => $record->summonId]) }}" class="btn btn-primary">Pay Summon</a></td>
+                        <td>
+                            @if ($record->status == 'paid')
+                            <a class="btn btn-success w-24 opacity-50 text-white  text-center">Paid</a>
+                            @else
+                            <a href="{{ route('paySummon', ['summonId' => $record->summonId]) }}" class="btn btn-primary w-24 text-center text-white">Pay Summon</a>
+                            @endif
+                        </td>
+
 
                     </tr>
                     @endforeach

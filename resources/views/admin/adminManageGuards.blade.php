@@ -6,6 +6,17 @@
     </x-slot>
 
     <x-slot name="slot">
+        @if(session('success'))
+        <div class="alert alert-success my-5">
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="alert alert-danger my-5">
+            {{ session('error') }}
+        </div>
+        @endif
         <div class="overflow-x-auto">
             <table id="guardsTable" class="table">
                 <thead>
@@ -26,12 +37,14 @@
                         <td>{{ $guard->guard_username }}</td>
                         <td>{{ \Carbon\Carbon::parse($guard->created_at)->format('d-m-y') }}</td>
                         <td>{{ \Carbon\Carbon::parse($guard->updated_at)->format('d-m-y') }}</td>
-                        <td><button class="btn btn-primary btn-sm" onclick="">Edit</button>
+                        <td>
+                            <a href="{{ route('admin.edit_guard', $guard->securityId) }}" class="btn btn-primary btn-sm">Edit</a>
 
-                            <button class="btn btn-error btn-sm" onclick="">Delete</button>
+                            <button class="btn btn-error btn-sm" onclick="confirmDeletion('{{ $guard->securityId }}')">Delete</button>
                         </td>
                     </tr>
                     @endforeach
+
                 </tbody>
             </table>
         </div>
@@ -39,6 +52,25 @@
             Guard</button>
     </x-slot>
 </x-app-layout>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDeletion(securityId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to the delete route
+                window.location.href = `/admin/delete_guard/${securityId}`;
+            }
+        });
+    }
+</script>
 
 <script>
     $(document).ready(function() {

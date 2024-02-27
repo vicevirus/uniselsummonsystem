@@ -54,16 +54,9 @@ Route::get('/dashboard', function () {
         })
         ->get();
 
-    $filteredRecords = $summonsRecords->where('status', '!=', 'paid');
 
 
-
-
-
-
-
-
-    return view('user.userDashboard', ['summonsRecords' => $filteredRecords]);
+    return view('user.userDashboard', ['summonsRecords' => $summonsRecords]);
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/paySummon', function (Request $request) {

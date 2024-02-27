@@ -31,6 +31,63 @@ class SummonController extends Controller
             return response()->json(['error' => 'IssueSummon not found'], 404);
         }
     }
+
+    public function updateSummon(Request $request, $summonId)
+    {
+        // Find the IssueSummon by summon ID
+        $issueSummon = IssueSummon::where('summonId', $summonId)->first();
+
+        // Check if IssueSummon exists
+        if ($issueSummon) {
+            // Update the IssueSummon with the new data
+            $issueSummon->update([
+                'violation' => $request->violation,
+                'fineAmount' => $request->fineAmount,
+            ]);
+
+            // Redirect back to the manage summons page with a success message
+            return redirect()->route('admin.manage_summons')->with('success', 'Summon updated successfully.');
+        } else {
+            // Redirect back with an error message if the summon was not found
+            return redirect()->route('admin.manage_summons')->with('error', 'Summon not found');
+        }
+    }
+
+    public function deleteSummon(Request $request, $summonId)
+    {
+        // Find the IssueSummon by summon ID
+        $issueSummon = IssueSummon::where('summonId', $summonId)->first();
+
+        // Check if IssueSummon exists
+        if ($issueSummon) {
+            // Delete the IssueSummon
+            $issueSummon->delete();
+
+            // Redirect back to the manage summons page with a success message
+            return redirect()->route('admin.manage_summons')->with('success', 'Summon deleted successfully.');
+        } else {
+            // Redirect back with an error message if the summon was not found
+            return redirect()->route('admin.manage_summons')->with('error', 'Summon not found');
+        }
+    }
+
+
+
+
+
+    public function editSummonView(Request $request, $summonId)
+    {
+        // Find the IssueSummon by summon ID
+        $issueSummon = IssueSummon::where('summonId', $summonId)->first();
+
+        // Check if IssueSummon exists
+        if ($issueSummon) {
+            return view('admin.adminEditSummon', ['summon' => $issueSummon]);
+        } else {
+            return redirect()->route('admin.dashboard')->with('error', 'IssueSummon not found.');
+        }
+    }
+
     public function createSummon(Request $request)
     {
         // Validate request data

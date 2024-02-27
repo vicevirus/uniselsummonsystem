@@ -57,6 +57,44 @@ class SecurityGuardController extends Controller
         return redirect('/guard/login');
     }
 
+    public function editGuardForm(Request $request)
+    {
+        $securityId = $request->securityId;
+        $security = SecurityGuard::where('securityId', $securityId)->first();
+
+        return view('admin.adminEditGuard', ['guard' => $security]);
+    }
+
+    public function deleteGuard(Request $request)
+    {
+        $securityId = $request->securityId;
+
+        SecurityGuard::where('securityId', $securityId)->delete();
+
+        return redirect()->route('admin.manage_guards')->with('success', 'Security guard deleted successfully!');
+    }
+
+    public function updateGuard(Request $request, $securityId)
+    {
+
+
+        // Find the guard by securityId
+        $guard = SecurityGuard::where('securityId', $securityId)->first();
+
+        // Check if guard exists
+        if (!$guard) {
+            return back()->with('error', 'Guard not found.');
+        }
+
+        // Update the guard's password
+        $guard->guard_password = Hash::make($request->password);
+        $guard->save();
+
+
+        // Redirect back with a success message
+        return redirect()->route('admin.manage_guards')->with('success', 'Guard password updated successfully.');
+    }
+
     public function createGuardForm()
     {
         return view('guard.createGuard');

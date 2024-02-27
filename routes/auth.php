@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\SecurityGuardController;
 use App\Http\Controllers\Auth\AdminController;
+use App\Http\Controllers\SummonController;
 
 
 Route::middleware('guest')->group(function () {
@@ -72,16 +73,28 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/delete_student/{matricNumber}', [AdminController::class, 'deleteStudent'])->name('delete_student');
 
 
+
+        //Edit summon
+        Route::put('/summon/{summonId}/update', [SummonController::class, 'updateSummon'])->name('updateSummon');
+
+
+        //Edit guard
+        Route::put('/guard/{securityId}/update', [SecurityGuardController::class, 'updateGuard'])->name('updateGuard');
+
         //Edit student
         Route::put('/student/{matricNumber}/update', [AdminController::class, 'updateStudent'])->name('updateStudent');
 
         // Manage Summons
         Route::get('/manage_summons', [AdminController::class, 'manageSummons'])->name('manage_summons');
+        Route::get('/edit_summon/{summonId}', [SummonController::class, 'editSummonView'])->name('edit_summon');
+        Route::get('/delete_summon/{summonId}', [SummonController::class, 'deleteSummon'])->name('delete_summon');
 
         // Register security guards account
         Route::get('/manage_guards', [AdminController::class, 'manageGuards'])->name('manage_guards');
         Route::get('/createGuard', [SecurityGuardController::class, 'createGuardForm']);
         Route::post('/storeGuard', [SecurityGuardController::class, 'storeGuard']);
+        Route::get('/delete_guard/{securityId}', [SecurityGuardController::class, 'deleteGuard'])->name('delete_guard');
+        Route::get('/edit_guard/{securityId}', [SecurityGuardController::class, 'editGuardForm'])->name('edit_guard');
     });
 });
 
